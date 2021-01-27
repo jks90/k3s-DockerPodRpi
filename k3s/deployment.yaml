@@ -1,0 +1,43 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: docker-to-ci
+  labels:
+    app: docker-to-ci
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-to-ci
+  template:
+    metadata:
+      labels:
+        app: docker-to-ci
+    spec:
+      volumes:
+        - name: volume-1
+          configMap:
+            name: docker-to-ci
+      containers:
+        - name: docker-to-ci
+          image: 'juankanh/k3s-docker:latest'
+          env:
+            - name: GIT-USER
+              valueFrom:
+                secretKeyRef:
+                  name: git-credentials
+                  key: user-git
+            - name: GIT-PASS
+              valueFrom:
+                secretKeyRef:
+                  name: git-credentials
+                  key: pass-git
+          command: 
+            - 'sh'
+            - '-c'
+            - 'cp /home/install.sh /install.sh && ./in.sh'
+          resources: {}
+          volumeMounts:
+            - name: volume-1
+              mountPath: /home
+

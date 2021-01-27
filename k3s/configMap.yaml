@@ -1,0 +1,23 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: docker-to-ci
+  namespace: spiderboot
+data:
+  install.sh: |-
+    /bin/sh
+
+    echo "Iniciando Descarga del repositorio..."
+
+    echo "git clone https://$GIT-USER:$GIT-PASS@github.com/jks90/spiderBoot-React.git"
+     
+    echo "cd spiderBoot-React"
+
+    echo "build de la imagen..."
+    echo "docker build -t juankanh/k3s-docker ."
+
+    echo "push de la imagen..."
+    echo "docker push juankanh/k3s-docker:latest"
+
+    sleep 50000
+
